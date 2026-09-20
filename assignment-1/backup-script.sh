@@ -47,9 +47,9 @@ diff_checker() {
   diff_output=$(diff -rq "$folder1" "$folder2")
 
   # diff output parser
-  modified_pattern="^.* and '?${folder2}/(.*)'? differ"
-  new_pattern="^Only in '?${folder2}(/.*)?'?: (.*)"
-  deleted_pattern="^Only in '?${folder1}(/.*)?'?: (.*)"
+  modified_pattern="^.* and '?${folder2}/([^']*)'? differ"
+  new_pattern="^Only in '?${folder2}(/[^']*)?'?: (.*)"
+  deleted_pattern="^Only in '?${folder1}(/[^']*)?'?: (.*)"
 
   while read -r line; do
     if [[ "$line" =~ $modified_pattern ]]; then
@@ -74,7 +74,6 @@ diff_checker() {
       
       target_path="$target_backup_folder/$file_path"
       mkdir -p "$target_path"
-      echo "DEBUG: matched new branch for line: $line" >&2
       cp "$WATCHED_FOLDER/$file_path/$file_name" "$target_path"
 
     elif [[ "$line" =~ $deleted_pattern ]]; then
@@ -84,7 +83,6 @@ diff_checker() {
       file_path="${BASH_REMATCH[1]}"
       file_name="${BASH_REMATCH[2]}"
 
-      echo "DEBUG: matched deleted branch for line: $line" >&2
       echo "$file_path/$file_name" >> "$target_backup_folder/.deleted.info"
     fi
   done <<< "$diff_output"

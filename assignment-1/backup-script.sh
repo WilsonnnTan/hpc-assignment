@@ -47,9 +47,9 @@ diff_checker() {
   diff_output=$(diff -rq "$folder1" "$folder2")
 
   # diff output parser
-  modified_pattern="^.* and '${folder2}/(.*)' differ"
-  new_pattern="^Only in '${folder2}(/.*)?': (.*)"
-  deleted_pattern="^Only in '${folder1}(/.*)?': (.*)"
+  modified_pattern="^.* and '?${folder2}/(.*)'? differ"
+  new_pattern="^Only in '?${folder2}(/.*)?'?: (.*)"
+  deleted_pattern="^Only in '?${folder1}(/.*)?'?: (.*)"
 
   while read -r line; do
     if [[ "$line" =~ $modified_pattern ]]; then

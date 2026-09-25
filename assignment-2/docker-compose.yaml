@@ -1,0 +1,50 @@
+services:
+  headnode:
+    build: .
+    image: cluster-node:latest
+    container_name: headnode
+    hostname: headnode
+    networks:
+      cluster-net:
+        ipv4_address: 172.28.0.10
+    ports:
+      - "2222:22"   # ssh root@localhost -p 2222 (password: cluster123)
+    volumes:
+      - shared-data:/shared
+    tty: true
+
+  computenode1:
+    image: cluster-node:latest
+    container_name: computenode1
+    hostname: computenode1
+    networks:
+      cluster-net:
+        ipv4_address: 172.28.0.11
+    volumes:
+      - shared-data:/shared
+    depends_on:
+      - headnode
+    tty: true
+
+  computenode2:
+    image: cluster-node:latest
+    container_name: computenode2
+    hostname: computenode2
+    networks:
+      cluster-net:
+        ipv4_address: 172.28.0.12
+    volumes:
+      - shared-data:/shared
+    depends_on:
+      - headnode
+    tty: true
+
+networks:
+  cluster-net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.28.0.0/16
+
+volumes:
+  shared-data:

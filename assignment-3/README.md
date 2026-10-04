@@ -59,3 +59,9 @@ ssh -p 2222 -i <path-to-copied-key> user@localhost
 ```
 
 Password login is disabled; only the key works.
+
+## 4. Run the parallel program script
+
+```bash
+/shared/program.sh
+```
